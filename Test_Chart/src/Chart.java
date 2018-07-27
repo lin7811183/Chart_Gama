@@ -94,7 +94,7 @@ public class Chart {
 			            dataset.setValue(Column, "Lineage M GameWorld", ResultSet.getString(1));
 			        }
 
-					JFreeChart Chart = ChartFactory.createBarChart3D("Lineage M GameWorld Crah Chart", "GameWorld", "Carsh_Count", dataset, PlotOrientation.VERTICAL, true, true, false);
+					JFreeChart Chart = ChartFactory.createBarChart3D("Lineage M GameWorld Crash Chart", "GameWorld", "Carsh_Count", dataset, PlotOrientation.VERTICAL, true, true, false);
 					CategoryPlot catPlot = Chart.getCategoryPlot();
 					catPlot.setRangeGridlinePaint(Color.BLACK);
 					//ChartFrame chartFrm = new ChartFrame("Lineage M GameWorld Crah Grapth", Chart, true);
