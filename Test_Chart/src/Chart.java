@@ -19,13 +19,21 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.BoxLayout;
 
 public class Chart {
-
+	
 	private JFrame frame;
-
+	ResultSet ResultSet;
+	
+	
 	/**
 	 * Launch the application.
 	 */
@@ -54,7 +62,7 @@ public class Chart {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setBounds(100, 100, 746, 517);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -62,37 +70,53 @@ public class Chart {
 		panel.setBackground(Color.GRAY);
 		panel.setForeground(Color.GRAY);
 		
+		
+		
 		JButton btnTest = new JButton("Test");
 		btnTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				/*int s1 = Integer.parseInt("10");
-					final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-					dataset.setValue(s1, "1", "Test_1");
-					System.out.println(dataset);
-					JFreeChart Chart = ChartFactory.createBarChart("", "", "", dataset, PlotOrientation.HORIZONTAL, false, false, false);
+				//DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+				//¸ü¤JJDBC Driver 
+		        try {
+		        	DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+					Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			        Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost;"+ "databaseName=ManagerDB;user=sa;password=!QAZ2wsx;");
+			        DatabaseMetaData metadata = conn.getMetaData();           
+			        //System.out.println("Database Name: "+ metadata.getDatabaseProductName());
+			        System.out.println("Connect MS DB");
+			        Statement Statement = conn.createStatement();
+			        String query = "SELECT [MachineName],count([MachineName]) as'Crash_Count' FROM [MngDB2].[dbo].[GameCrashReport] Where [TimeCreated] >= '2018-04-05 05:11:07.0000000' and [TimeCreated] <='2018-04-10 05:11:07.0000000' Group By [MachineName]";
+			        ResultSet = Statement.executeQuery(query);
+			        while (ResultSet.next()) {
+			        	int Column = Integer.parseInt(ResultSet.getString(2));
+			            System.out.println(ResultSet.getString(1)+","+ResultSet.getString(2));
+			            dataset.setValue(Column, "Lineage M GameWorld", ResultSet.getString(1));
+			        }
+
+					JFreeChart Chart = ChartFactory.createBarChart3D("Lineage M GameWorld Crah Grapth", "GameWorld", "Carsh_Count", dataset, PlotOrientation.VERTICAL, true, true, false);
 					CategoryPlot catPlot = Chart.getCategoryPlot();
 					catPlot.setRangeGridlinePaint(Color.BLACK);
+					//ChartFrame chartFrm = new ChartFrame("Lineage M GameWorld Crah Grapth", Chart, true);
+					//chartFrm.setVisible(true);
+					//chartFrm.setSize(500, 400);
 					ChartPanel chartPanel = new ChartPanel(Chart);
 					panel.removeAll();
-					panel.add(chartPanel,BorderLayout.CENTER);
-					panel.validate();*/
-				DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+					panel.add(chartPanel);
+					panel.updateUI();
+				} catch (ClassNotFoundException e1) {
+					System.out.println("MS DB Connet Error....");
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					System.out.println("MS DB Connet Error....");
+					e1.printStackTrace();
+				}
+		        /*
 				for(int i=1;i<=10;i++) {
 					dataset.setValue(i, "Point", "People_"+i);
 					//dataset.setValue(60, "Point", "java");
-				}
+				}*/
 
-				JFreeChart Chart = ChartFactory.createBarChart3D("People_Rcord", "People_Name", "People_Point", dataset, PlotOrientation.VERTICAL, true, true, false);
-				CategoryPlot catPlot = Chart.getCategoryPlot();
-				catPlot.setRangeGridlinePaint(Color.BLACK);
-				//ChartFrame chartFrm = new ChartFrame("People_Rcord", Chart, true);
-				//chartFrm.setVisible(true);
-				//chartFrm.setSize(500, 400);
-				ChartPanel chartPanel = new ChartPanel(Chart);
-				panel.removeAll();
-				panel.add(chartPanel);
-				panel.updateUI();
 			}
 		});
 		

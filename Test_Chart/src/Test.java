@@ -20,12 +20,10 @@ public class Test {
 	        //System.out.println("Database Name: "+ metadata.getDatabaseProductName());
 	        System.out.println("Connect MS DB");
 	        Statement Statement = conn.createStatement();
-	        String query = "SELECT * FROM [ManagerDB].[dbo].[Host_Service_Type]";
+	        String query = "SELECT [MachineName],count([MachineName]) as'Crash_Count' FROM [MngDB2].[dbo].[GameCrashReport] Where [TimeCreated] >= '2018-04-05 05:11:07.0000000' and [TimeCreated] <='2018-04-10 05:11:07.0000000' Group By [MachineName]";
 	        ResultSet = Statement.executeQuery(query);
-	        GameWorldList List;
 	        while (ResultSet.next()) {
-	        	List = new GameWorldList(ResultSet.getString("Host_Name"),ResultSet.getString("Host_Service"),ResultSet.getString("Service_Type"));
-	            System.out.println(ResultSet.getString(1) + ", " + ResultSet.getString(2) + ", " + ResultSet.getString(3));
+	            System.out.println(ResultSet.getString(1)+","+ResultSet.getString(2));
 	        }
 	        
 		}catch(Exception x) {
