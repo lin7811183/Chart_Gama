@@ -78,14 +78,17 @@ public class Chart {
 					panel.add(chartPanel,BorderLayout.CENTER);
 					panel.validate();*/
 				DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-				dataset.setValue(70, "Point", "EJ");
-				dataset.setValue(60, "Point", "java");
+				for(int i=1;i<=10;i++) {
+					dataset.setValue(i, "Point", "People_"+i);
+					//dataset.setValue(60, "Point", "java");
+				}
+
 				JFreeChart Chart = ChartFactory.createBarChart3D("People_Rcord", "People_Name", "People_Point", dataset, PlotOrientation.VERTICAL, true, true, false);
 				CategoryPlot catPlot = Chart.getCategoryPlot();
 				catPlot.setRangeGridlinePaint(Color.BLACK);
-				ChartFrame chartFrm = new ChartFrame("People_Rcord", Chart, true);
-				chartFrm.setVisible(true);
-				chartFrm.setSize(500, 400);
+				//ChartFrame chartFrm = new ChartFrame("People_Rcord", Chart, true);
+				//chartFrm.setVisible(true);
+				//chartFrm.setSize(500, 400);
 				ChartPanel chartPanel = new ChartPanel(Chart);
 				panel.removeAll();
 				panel.add(chartPanel);
