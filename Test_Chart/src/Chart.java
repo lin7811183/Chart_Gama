@@ -133,7 +133,7 @@ public class Chart {
 			        System.out.println("Connect MS DB");
 			        Statement Statement = conn.createStatement();
 			        //String query = "SELECT [MachineName],convert(varchar(6), [TimeCreated], 112) as'Log'into #tmp1 FROM [MngDB2].[dbo].[GameCrashReport] Where convert(varchar(6), [TimeCreated], 112) >= '201711' and convert(varchar(6), [TimeCreated], 112) <= '201806' and [MachineName] = 'Game57.LineageM.TW' Group By [MachineName],[TimeCreated]";
-			        String query1 = "SELECT [MachineName],convert(varchar(6), [TimeCreated], 112) as'Log'into #tmp1 FROM [MngDB2].[dbo].[GameCrashReport] Where convert(varchar(6), [TimeCreated], 112) >= '201711' and convert(varchar(6), [TimeCreated], 112) <= '201806' and [MachineName] = 'Game57.LineageM.TW' Group By [MachineName],[TimeCreated] Select [MachineName],[Log],Count([Log]) From #tmp1 Group By [MachineName],[Log]";
+			        String query1 = "SELECT [MachineName],convert(varchar(6), [TimeCreated], 112) as'Log'into #tmp1 FROM [MngDB2].[dbo].[GameCrashReport] Where convert(varchar(6), [TimeCreated], 112) >= '201711' and convert(varchar(6), [TimeCreated], 112) <= '201806' and [MachineName] in('Game57.LineageM.TW','Game39.LineageM.TW') Group By [MachineName],[TimeCreated] Select [MachineName],[Log],Count([Log]) From #tmp1 Group By [MachineName],[Log]";
 			        ResultSet = Statement.executeQuery(query1);
 			        while (ResultSet.next()) {
 			        	int Column = Integer.parseInt(ResultSet.getString(3));
