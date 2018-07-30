@@ -72,7 +72,7 @@ public class Chart {
 		
 		
 		
-		JButton btnTest = new JButton("Test");
+		JButton btnTest = new JButton("\u76F4\u7DDA\u5716");
 		btnTest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -91,10 +91,10 @@ public class Chart {
 			        while (ResultSet.next()) {
 			        	int Column = Integer.parseInt(ResultSet.getString(2));
 			            System.out.println(ResultSet.getString(1)+","+ResultSet.getString(2));
-			            dataset.setValue(Column, "Lineage M GameWorld", ResultSet.getString(1));
+			            dataset.setValue(Column,ResultSet.getString(1),ResultSet.getString(1));
 			        }
 
-					JFreeChart Chart = ChartFactory.createBarChart3D("Lineage M GameWorld Crash Chart", "GameWorld", "Carsh_Count", dataset, PlotOrientation.VERTICAL, true, true, false);
+					JFreeChart Chart = ChartFactory.createBarChart3D("Lineage M GameWorld Crash Chart", "GameWorld", "Crash_Count", dataset, PlotOrientation.VERTICAL, true, true, false);
 					CategoryPlot catPlot = Chart.getCategoryPlot();
 					catPlot.setRangeGridlinePaint(Color.BLACK);
 					//ChartFrame chartFrm = new ChartFrame("Lineage M GameWorld Crah Grapth", Chart, true);
@@ -120,6 +120,54 @@ public class Chart {
 			}
 		});
 		
+		JButton btnNewButton = new JButton("\u6298\u7DDA\u5716");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+ 		        try {
+		        	DefaultCategoryDataset dataset2 = new DefaultCategoryDataset();
+		        	//¸ü¤JJDBC Driver
+					Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			        Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost;"+ "databaseName=ManagerDB;user=sa;password=!QAZ2wsx;");
+			        DatabaseMetaData metadata = conn.getMetaData();           
+			        //System.out.println("Database Name: "+ metadata.getDatabaseProductName());
+			        System.out.println("Connect MS DB");
+			        Statement Statement = conn.createStatement();
+			        //String query = "SELECT [MachineName],convert(varchar(6), [TimeCreated], 112) as'Log'into #tmp1 FROM [MngDB2].[dbo].[GameCrashReport] Where convert(varchar(6), [TimeCreated], 112) >= '201711' and convert(varchar(6), [TimeCreated], 112) <= '201806' and [MachineName] = 'Game57.LineageM.TW' Group By [MachineName],[TimeCreated]";
+			        String query1 = "SELECT [MachineName],convert(varchar(6), [TimeCreated], 112) as'Log'into #tmp1 FROM [MngDB2].[dbo].[GameCrashReport] Where convert(varchar(6), [TimeCreated], 112) >= '201711' and convert(varchar(6), [TimeCreated], 112) <= '201806' and [MachineName] = 'Game57.LineageM.TW' Group By [MachineName],[TimeCreated] Select [MachineName],[Log],Count([Log]) From #tmp1 Group By [MachineName],[Log]";
+			        ResultSet = Statement.executeQuery(query1);
+			        while (ResultSet.next()) {
+			        	int Column = Integer.parseInt(ResultSet.getString(3));
+			            System.out.println(ResultSet.getString(1)+","+ResultSet.getString(2)+","+ResultSet.getString(3));
+			            dataset2.setValue(Column, ResultSet.getString(1), ResultSet.getString(2));
+			        }
+
+					JFreeChart Chart1 = ChartFactory.createLineChart("Lineage M GameWorld Crash Chart", "GameWorld", "Crash_Count", dataset2, PlotOrientation.VERTICAL, true, true, false);
+					CategoryPlot catPlot = Chart1.getCategoryPlot();
+					catPlot.setRangeGridlinePaint(Color.BLACK);
+					//ChartFrame chartFrm = new ChartFrame("Lineage M GameWorld Crah Grapth", Chart, true);
+					//chartFrm.setVisible(true);
+					//chartFrm.setSize(500, 400);
+					ChartPanel chartPanel = new ChartPanel(Chart1);
+					panel.removeAll();
+					panel.add(chartPanel);
+					panel.updateUI();
+				} catch (ClassNotFoundException e1) {
+					System.out.println("MS DB Connet Error....");
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					System.out.println("MS DB Connet Error....");
+					e1.printStackTrace();
+				}
+		        /*
+				for(int i=1;i<=10;i++) {
+					dataset.setValue(i, "Point", "People_"+i);
+					//dataset.setValue(60, "Point", "java");
+				}*/
+
+			}
+			
+		});
+		
 		
 		
 		
@@ -130,23 +178,25 @@ public class Chart {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel, GroupLayout.DEFAULT_SIZE, 710, Short.MAX_VALUE)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGap(337)
-							.addComponent(btnTest))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)))
+							.addComponent(btnTest)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnNewButton)))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
-					.addGap(18)
-					.addComponent(btnTest)
-					.addGap(22))
+					.addComponent(panel, GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnTest)
+						.addComponent(btnNewButton))
+					.addGap(30))
 		);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		frame.getContentPane().setLayout(groupLayout);
