@@ -141,7 +141,7 @@ public class Chart {
 			            dataset2.setValue(Column, ResultSet.getString(1), ResultSet.getString(2));
 			        }
 
-					JFreeChart Chart1 = ChartFactory.createLineChart("Lineage M GameWorld Crash Chart", "GameWorld", "Crash_Count", dataset2, PlotOrientation.VERTICAL, true, true, false);
+					JFreeChart Chart1 = ChartFactory.createLineChart("Lineage M GameWorld Crash Chart", "Date", "Crash_Count", dataset2, PlotOrientation.VERTICAL, true, true, false);
 					CategoryPlot catPlot = Chart1.getCategoryPlot();
 					catPlot.setRangeGridlinePaint(Color.BLACK);
 					//ChartFrame chartFrm = new ChartFrame("Lineage M GameWorld Crah Grapth", Chart, true);
